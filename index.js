@@ -5,6 +5,8 @@ let canvasImage
 let pencilToolButton
 let brushToolButton
 let eraserToolButton
+let layer1Button
+let layer2Button
 
 let brushXPoints = []
 let brushYPoints = []
@@ -33,9 +35,19 @@ class Point {
 	}
 }
 
+class Layer {
+	constructor(drawColour, visible) {
+		this.drawColour = drawColour
+		this.visible = visible
+	}
+}
+
 let shapeBounds = new ShapeBoundingBox(0, 0, 0, 0)
 let mouseDown = new Point(0, 0)
 let loc = new Point(0, 0)
+let layer1 = new Layer('black', true)
+let layer2 = new Layer('red', true)
+let currentLayer = layer1
 
 document.addEventListener('DOMContentLoaded', setupCanvas)
 
@@ -52,14 +64,31 @@ function setupCanvas() {
 	pencilToolButton = document.getElementById("tool-pencil")
 	brushToolButton = document.getElementById("tool-brush")
 	eraserToolButton = document.getElementById("tool-eraser")
+	
+	layer1Button = document.getElementById("layer-1")
+	layer2Button = document.getElementById("layer-2")
 }
 
 function changeTool(tool) {
-	pencilToolButton.src = "./res/buttons/pencil-tool-button.png"
-	brushToolButton.src = "./res/buttons/brush-tool-button.png"
-	eraserToolButton.src = "./res/buttons/eraser-tool-button.png"
-	document.getElementById("tool-" + tool).src = "./res/buttons/" + tool + "-tool-button-clicked.png"
+	pencilToolButton.src = "./res/buttons/tools/pencil-tool-button.png"
+	brushToolButton.src = "./res/buttons/tools/brush-tool-button.png"
+	eraserToolButton.src = "./res/buttons/tools/eraser-tool-button.png"
+	document.getElementById("tool-" + tool).src = "./res/buttons/tools/" + tool + "-tool-button-clicked.png"
 	currentTool = tool
+}
+
+function changeLayer(flipLayer) {
+	layer1Button.src = "./res/buttons/layers/layer_1_unclicked.png"
+	layer2Button.src = "./res/buttons/layers/layer_2_unclicked.png"
+	
+	if(flipLayer === "layer_2") {
+		currentLayer = layer2
+		layer2Button.src = "./res/buttons/layers/layer_2_" + currentLayer.drawColour + "_clicked.png"
+	}else {
+		currentLayer = layer1
+		layer1Button.src = "./res/buttons/layers/layer_1_" + currentLayer.drawColour + "_clicked.png"
+	}
+	
 }
 
 // get mouse position relative to canvas
@@ -134,13 +163,13 @@ function isMouseMoving(evt) {
 			}
 			redrawCanvasImage()
 			drawBrush()*/
-			ctx.fillStyle = "rgba(0, 0, 0, 1)"
+			ctx.fillStyle = currentLayer.drawColour
 			ctx.fillRect(loc.x, loc.y, 2, 2)	
 		}else if(currentTool === "eraser") {
-			ctx.fillStyle = "rgba(255, 255, 255, 1)"
+			ctx.fillStyle = "white"
 			ctx.fillRect(loc.x, loc.y, 1, 1)	
 		}else if(currentTool === "brush") {			
-			ctx.fillStyle = "rgba(0, 0, 0, 1)"
+			ctx.fillStyle = currentLayer.drawColour
 			if(((loc.x - 1) % 3) == 0 && ((loc.y - 1) % 3) == 0) 
 				ctx.fillRect(loc.x, loc.y, 1, 1)
 		}else {
