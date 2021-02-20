@@ -29,16 +29,28 @@
 	<div class="flex items-center justify-center">
 		<div class="float-left">
 			<a href="#" onclick="changeTool('pencil')">
-				<img id="tool-pencil" src="./res/buttons/pencil-tool-button.png">
+				<img id="tool-pencil" src="./res/buttons/tools/pencil-tool-button.png">
 			</a>
 			<a href="#" onclick="changeTool('brush')">
-				<img id="tool-brush" src="./res/buttons/brush-tool-button.png">
+				<img id="tool-brush" src="./res/buttons/tools/brush-tool-button.png">
 			</a>
 			<a href="#" onclick="changeTool('eraser')">
-				<img id="tool-eraser" src="./res/buttons/eraser-tool-button.png">
+				<img id="tool-eraser" src="./res/buttons/tools/eraser-tool-button.png">
 			</a>
 		</div>
 		<canvas id="canvas" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"></canvas>
+		<div>
+			<div class="float-right">
+				<a href="#" onclick="changeLayer('layer_2')">
+					<img id="layer-2" src="./res/buttons/layers/layer_2_unclicked.png">
+				</a>
+			</div>
+			<div class="float-right">
+				<a href="#" onclick="changeLayer('layer_1')">
+					<img id="layer-1" src="./res/buttons/layers/layer_1_unclicked.png">
+				</a>
+			</div>
+		</div>
 	</div>
 	<div class = "flex items-center justify-center text-xs my-8">
 		Version 0.1.0
