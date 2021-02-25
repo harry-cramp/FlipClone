@@ -211,10 +211,23 @@ function draw() {
 		drawBrush()*/
 		ctx.fillStyle = currentLayer.drawColour
 		console.log("x: " + loc.x + ", y: " + loc.y)
+		/*
 		if(isPixelOccupied(loc.x, loc.y)) {
 			overlappingPixels.push(loc)
 		}else {
 			ctx.fillRect(loc.x, loc.y, 2, 2)
+		}*/
+		if(previousPencilPoint == null) {
+			previousPencilPoint = new Point(loc.x, loc.y)
+		}else if(previousPencilPoint.x != loc.x || previousPencilPoint != loc.y) {			
+			ctx.beginPath()
+			ctx.lineWidth = 2
+			ctx.moveTo(previousPencilPoint.x, previousPencilPoint.y)
+			ctx.lineTo(loc.x, loc.y)
+			ctx.closePath()
+			ctx.stroke()
+			
+			previousPencilPoint = new Point(loc.x, loc.y)
 		}
 	}else if(currentTool === "eraser") {
 		ctx.fillStyle = "white"
