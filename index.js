@@ -11,11 +11,13 @@ let layer2Button
 let brushXPoints = []
 let brushYPoints = []
 let brushDownPos = []
+let overlappingPixels = []
 
 let drag = false
 let drawColour = 'black'
 let drawWidth = 2
 let currentTool = 'pencil'
+let currentLayerLabel = 'layer_1'
 let canvasWidth = 256
 let canvasHeight = 192
 
@@ -36,7 +38,8 @@ class Point {
 }
 
 class Layer {
-	constructor(drawColour, visible) {
+	constructor(label, drawColour, visible, imgData) {
+		this.label = label
 		this.drawColour = drawColour
 		this.visible = visible
 	}
@@ -44,9 +47,10 @@ class Layer {
 
 let shapeBounds = new ShapeBoundingBox(0, 0, 0, 0)
 let mouseDown = new Point(0, 0)
-let loc = new Point(0, 0)
-let layer1 = new Layer('black', true)
-let layer2 = new Layer('red', true)
+let loc = new Point(-1, -1)
+let previousPencilPoint = null
+let layer1 = new Layer('layer_1', 'black', true, null)
+let layer2 = new Layer('layer_2', 'red', true, null)
 let currentLayer = layer1
 
 document.addEventListener('DOMContentLoaded', setupCanvas)
@@ -67,6 +71,9 @@ function setupCanvas() {
 	
 	layer1Button = document.getElementById("layer-1")
 	layer2Button = document.getElementById("layer-2")
+	
+	changeTool("pencil")
+	changeLayer("layer_1")
 }
 
 function changeTool(tool) {
@@ -80,6 +87,7 @@ function changeTool(tool) {
 function changeLayer(flipLayer) {
 	layer1Button.src = "./res/buttons/layers/layer_1_unclicked.png"
 	layer2Button.src = "./res/buttons/layers/layer_2_unclicked.png"
+	currentLayerLabel = flipLayer
 	
 	if(flipLayer === "layer_2") {
 		currentLayer = layer2
@@ -88,7 +96,30 @@ function changeLayer(flipLayer) {
 		currentLayer = layer1
 		layer1Button.src = "./res/buttons/layers/layer_1_" + currentLayer.drawColour + "_clicked.png"
 	}
+}
+
+function swapLayers() {
+	tempColour = layer1.drawColour
+	layer1.drawColour = layer2.drawColour
+	layer2.drawColour = tempColour
 	
+	if(currentLayerLabel === layer1.label) {
+		changeLayer(layer2.label)
+		ctx.fillStyle = layer2.drawColour
+		for(let i in overlappingPixels) {
+			point = overlappingPixels[i]
+			console.log(point.x)
+			ctx.fillRect(point.x, point.y, 2, 2)
+		}
+	}else {
+		changeLayer(layer1.label)
+		ctx.fillStyle = layer1.drawColour
+		for(let i in overlappingPixels) {
+			point = overlappingPixels[i]
+			console.log(point.x)
+			ctx.fillRect(point.x, point.y, 2, 2)
+		}
+	}
 }
 
 // get mouse position relative to canvas
@@ -108,6 +139,11 @@ function getCanvasImage() {
 // refresh canvas 
 function redrawCanvasImage() {
 	ctx.putImageData(canvasImage, 0, 0)
+}
+
+function refreshCanvas() {
+	getCanvasImage()
+	redrawCanvasImage()
 }
 
 function addBrushPoint(x, y, mouseDown) {
@@ -130,6 +166,73 @@ function drawBrush() {
 	}
 }
 
+function colourDataEqualsLabel(red, green, blue, colour) {
+	switch(colour.toLowerCase()) {
+		case "black":
+			return red == 0 && green == 0 && blue == 0
+		case "red":
+			return red == 255 && green == 0 && blue == 0
+		case "blue":
+			return red == 0 && green == 0 && blue == 255
+		default:
+			return red == 255 && green == 255 && blue == 255
+	}
+}
+
+function isPixelOccupied(x, y) {
+	var data = ctx.getImageData(0, 0, canvasWidth, canvasHeight).data
+	var index = (Math.floor(y) * canvasWidth + Math.floor(x)) * 4
+	console.log("Draw index: " + index)
+	var oppositeLayerColour
+	if(currentLayer === "layer_2")
+		oppositeLayerColour = layer1.drawColour
+	else
+		oppositeLayerColour = layer2.drawColour
+	/*
+	for(var i = 0; i < data.length; i++) {
+		if(data[i] != 0) {
+			console.log("DATA i: " + i + ", data: " + data[i])
+		}
+	}
+	console.log("data at " + index + ": " + data[index])
+	console.log("data at " + (index + 1) + ": " + data[index + 1])
+	console.log("data at " + (index + 2) + ": " + data[index + 2])*/
+	
+	return !colourDataEqualsLabel(data[index], data[index + 1], data[index + 2], "white") && colourDataEqualsLabel(data[index], data[index + 1], data[index + 2], oppositeLayerColour)
+}
+
+function draw() {
+	if(currentTool === "pencil") {
+		/*
+		if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
+			addBrushPoint(loc.x, loc.y)
+		}
+		redrawCanvasImage()
+		drawBrush()*/
+		ctx.fillStyle = currentLayer.drawColour
+		console.log("x: " + loc.x + ", y: " + loc.y)
+		if(isPixelOccupied(loc.x, loc.y)) {
+			overlappingPixels.push(loc)
+		}else {
+			ctx.fillRect(loc.x, loc.y, 2, 2)
+		}
+	}else if(currentTool === "eraser") {
+		ctx.fillStyle = "white"
+		ctx.fillRect(loc.x, loc.y, 1, 1)	
+	}else if(currentTool === "brush") {		
+		ctx.fillStyle = currentLayer.drawColour
+		console.log("x: " + loc.x + ", y: " + loc.y)
+		if(isPixelOccupied(loc.x, loc.y)) {
+			overlappingPixels.push(loc)
+		}else {
+			if(((Math.floor(loc.x) - 1) % 3) == 0 && ((Math.floor(loc.y) - 1) % 3) == 0)
+				ctx.fillRect(Math.floor(loc.x), Math.floor(loc.y), 1, 1)
+		}
+	}
+	
+	//refresh()
+}
+
 function isMousePressed(evt) {
 	canvas.style.cursor = "crosshair"
 	loc = getMousePos(evt.clientX, evt.clientY)
@@ -138,17 +241,7 @@ function isMousePressed(evt) {
 	mouseDown.y = loc.y
 	drag = true
 	
-	if(currentTool === "pencil") {
-		ctx.fillStyle = "rgba(0, 0, 0, 1)"
-		ctx.fillRect(loc.x, loc.y, 2, 2)
-	}else if(currentTool === "brush") {
-		ctx.fillStyle = "rgba(0, 0, 0, 1)"
-		if(((loc.x - 1) % 3) == 0 && ((loc.y - 1) % 3) == 0) 
-			ctx.fillRect(loc.x, loc.y, 1, 1)
-	}else if(currentTool === "eraser") {
-		ctx.fillStyle = "rgba(255, 255, 255, 1)"
-		ctx.fillRect(loc.x, loc.y, 1, 1)
-	}
+	draw()
 }
 
 function isMouseMoving(evt) {
@@ -156,26 +249,7 @@ function isMouseMoving(evt) {
 	loc = getMousePos(evt.clientX, evt.clientY)
 	
 	if(drag) {
-		if(currentTool === "pencil") {
-			/*
-			if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
-				addBrushPoint(loc.x, loc.y)
-			}
-			redrawCanvasImage()
-			drawBrush()*/
-			ctx.fillStyle = currentLayer.drawColour
-			ctx.fillRect(loc.x, loc.y, 2, 2)	
-		}else if(currentTool === "eraser") {
-			ctx.fillStyle = "white"
-			ctx.fillRect(loc.x, loc.y, 1, 1)	
-		}else if(currentTool === "brush") {			
-			ctx.fillStyle = currentLayer.drawColour
-			if(((loc.x - 1) % 3) == 0 && ((loc.y - 1) % 3) == 0) 
-				ctx.fillRect(loc.x, loc.y, 1, 1)
-		}else {
-			redrawCanvasImage()
-			updateRubberband(loc)
-		}
+		draw()
 	}
 	
 	// handle brush
@@ -188,6 +262,7 @@ function isMouseReleased(evt) {
 	//redrawCanvasImage()
 	//updateRubberband(loc)
 	drag = false
+	previousPencilPoint = null
 }
 
 function updateRubberbandSize(loc) {
@@ -228,7 +303,6 @@ function updateRubberband(loc) {
 
 function drawRubberbandShape(loc) {
 	ctx.strokeStyle = drawColour
-	// remove if fill fucks up
 	ctx.fillStyle = drawColour
 	
 	if(currentTool === "brush") {
