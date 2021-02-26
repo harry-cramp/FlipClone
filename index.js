@@ -109,6 +109,30 @@ function showToolTypeMenu(tool) {
 	menu.style.display = "grid"
 }
 
+function selectToolType(tool, type) {
+	if(tool === "pencil") {
+		switch(type) {
+			case "1px":
+				drawWidth = 1
+				break;
+				
+			case "2px":
+				drawWidth = 2
+				break;
+				
+			case "3px":
+				drawWidth = 3
+				break;
+		}
+	}
+	
+	selector = document.getElementById(tool + "-selector-button")
+	menu = document.getElementById(tool + "-selector-menu")
+	
+	selector.style.display = "grid"
+	menu.style.display = "none"
+}
+
 function changeTool(tool) {
 	pencilToolButton.src = "./res/buttons/tools/pencil-tool-button.png"
 	brushToolButton.src = "./res/buttons/tools/brush-tool-button.png"
@@ -243,7 +267,7 @@ function draw() {
 			previousPencilPoint = new Point(loc.x, loc.y)
 		}else if(previousPencilPoint.x != loc.x || previousPencilPoint != loc.y) {			
 			ctx.beginPath()
-			ctx.lineWidth = 2
+			ctx.lineWidth = drawWidth
 			ctx.moveTo(previousPencilPoint.x, previousPencilPoint.y)
 			ctx.lineTo(loc.x, loc.y)
 			ctx.closePath()
