@@ -252,8 +252,19 @@ function draw() {
 		if(isPixelOccupied(loc.x, loc.y)) {
 			overlappingPixels.push(loc)
 		}else {
-			if(((Math.floor(loc.x) - 1) % 3) == 0 && ((Math.floor(loc.y) - 1) % 3) == 0)
-				ctx.fillRect(Math.floor(loc.x), Math.floor(loc.y), 1, 1)
+			nearestThirdX = Math.floor(loc.x)
+			if((nearestThirdX % 3) == 1)
+				nearestThirdX--
+			else if((nearestThirdX % 3) == 2)
+				nearestThirdX++
+			
+			nearestThirdY = Math.floor(loc.y)
+			if((nearestThirdY % 3) == 1)
+				nearestThirdY--
+			else if((nearestThirdY % 3) == 2)
+				nearestThirdY++
+			
+			ctx.fillRect(nearestThirdX, nearestThirdY, 1, 1)
 		}
 	}
 	
