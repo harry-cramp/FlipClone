@@ -25,6 +25,9 @@ let currentLayerLabel = 'layer_1'
 let canvasWidth = 256
 let canvasHeight = 192
 
+// pencil tool types
+let outline = false
+
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
 		this.left = left
@@ -111,6 +114,8 @@ function showToolTypeMenu(tool) {
 
 function selectToolType(tool, type) {
 	if(tool === "pencil") {
+		outline = false
+		
 		switch(type) {
 			case "1px":
 				drawWidth = 1
@@ -122,6 +127,10 @@ function selectToolType(tool, type) {
 				
 			case "3px":
 				drawWidth = 3
+				break;
+				
+			case "outline":
+				outline = true
 				break;
 		}
 	}
@@ -268,10 +277,26 @@ function draw() {
 		}else if(previousPencilPoint.x != loc.x || previousPencilPoint != loc.y) {			
 			ctx.beginPath()
 			ctx.lineWidth = drawWidth
+			if(outline)
+				ctx.lineWidth = 3
 			ctx.moveTo(previousPencilPoint.x, previousPencilPoint.y)
 			ctx.lineTo(loc.x, loc.y)
 			ctx.closePath()
 			ctx.stroke()
+			
+			if(outline) {
+				previousColour = ctx.strokeStyle
+				
+				ctx.beginPath()
+				ctx.lineWidth = 1
+				ctx.strokeStyle = "white"
+				ctx.moveTo(previousPencilPoint.x, previousPencilPoint.y)
+				ctx.lineTo(loc.x, loc.y)
+				ctx.closePath()
+				ctx.stroke()
+				
+				ctx.strokeStyle = previousColour
+			}
 			
 			previousPencilPoint = new Point(loc.x, loc.y)
 		}
