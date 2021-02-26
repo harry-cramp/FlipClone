@@ -1,5 +1,9 @@
 let canvas
+let canvasLayer1
+let canvasLayer2
 let ctx
+let ctxLayer1
+let ctxLayer2
 let canvasImage
 
 let pencilToolButton
@@ -38,10 +42,11 @@ class Point {
 }
 
 class Layer {
-	constructor(label, drawColour, visible, imgData) {
+	constructor(label, drawColour, visible, layerCanvas) {
 		this.label = label
 		this.drawColour = drawColour
 		this.visible = visible
+		this.layerCanvas = layerCanvas
 	}
 }
 
@@ -49,20 +54,29 @@ let shapeBounds = new ShapeBoundingBox(0, 0, 0, 0)
 let mouseDown = new Point(0, 0)
 let loc = new Point(-1, -1)
 let previousPencilPoint = null
-let layer1 = new Layer('layer_1', 'black', true, null)
-let layer2 = new Layer('layer_2', 'red', true, null)
+let layer1 = new Layer('layer_1', 'black', true)
+let layer2 = new Layer('layer_2', 'red', true)
 let currentLayer = layer1
 
 document.addEventListener('DOMContentLoaded', setupCanvas)
 
 function setupCanvas() {
 	canvas = document.getElementById('canvas')
-	ctx = canvas.getContext('2d')
-	ctx.strokeStyle = drawColour
-	ctx.lineWidth = drawWidth
+	ctxLayer1 = canvas.getContext('2d')
+	ctxLayer1.strokeStyle = drawColour
+	ctxLayer1.lineWidth = drawWidth
 	canvas.addEventListener("mousedown", isMousePressed)
 	canvas.addEventListener("mousemove", isMouseMoving)
 	canvas.addEventListener("mouseup", isMouseReleased)
+	ctx = ctxLayer1
+	
+	//canvasLayer2 = document.getElementById('canvas_layer_2')
+	//ctxLayer2 = canvasLayer2.getContext('2d')
+	//ctxLayer2.strokeStyle = layer2.drawColour
+	//ctxLayer2.lineWidth = drawWidth
+	//canvasLayer2.addEventListener("mousedown", isMousePressed)
+	//canvasLayer2.addEventListener("mousemove", isMouseMoving)
+	//canvasLayer2.addEventListener("mouseup", isMouseReleased)
 	
 	// get GUI elements
 	pencilToolButton = document.getElementById("tool-pencil")
@@ -73,7 +87,18 @@ function setupCanvas() {
 	layer2Button = document.getElementById("layer-2")
 	
 	changeTool("pencil")
-	changeLayer("layer_1")
+	changeLayer(layer1.label)
+}
+
+function setCurrentContext() {
+	/*
+	if(currentLayer === layer1.label) {
+		ctx = ctxLayer1
+		//canvas = canvasLayer1
+	}else {
+		ctx = ctxLayer2
+		//canvas = canvasLayer2
+	}*/
 }
 
 function changeTool(tool) {
@@ -96,30 +121,26 @@ function changeLayer(flipLayer) {
 		currentLayer = layer1
 		layer1Button.src = "./res/buttons/layers/layer_1_" + currentLayer.drawColour + "_clicked.png"
 	}
+	
+	setCurrentContext()
 }
 
 function swapLayers() {
-	tempColour = layer1.drawColour
-	layer1.drawColour = layer2.drawColour
-	layer2.drawColour = tempColour
-	
+	//tempColour = layer1.drawColour
+	//layer1.drawColour = layer2.drawColour
+	//layer2.drawColour = tempColour
+	/*
 	if(currentLayerLabel === layer1.label) {
+		//canvasLayer1.style.display = "none"
+		//canvasLayer2.style.display = "inline"
+		ctx = ctxLayer2
 		changeLayer(layer2.label)
-		ctx.fillStyle = layer2.drawColour
-		for(let i in overlappingPixels) {
-			point = overlappingPixels[i]
-			console.log(point.x)
-			ctx.fillRect(point.x, point.y, 2, 2)
-		}
 	}else {
+		//canvasLayer1.style.display = "inline"
+		//canvasLayer2.style.display = "none"
+		ctx = ctxLayer1
 		changeLayer(layer1.label)
-		ctx.fillStyle = layer1.drawColour
-		for(let i in overlappingPixels) {
-			point = overlappingPixels[i]
-			console.log(point.x)
-			ctx.fillRect(point.x, point.y, 2, 2)
-		}
-	}
+	}*/
 }
 
 // get mouse position relative to canvas
@@ -132,18 +153,10 @@ function getMousePos(x, y) {
 	return pos
 }
 
-function getCanvasImage() {
-	canvasImage = ctx.getImageData(0, 0, canvas.width, canvas.height)
-}
-
-// refresh canvas 
-function redrawCanvasImage() {
-	ctx.putImageData(canvasImage, 0, 0)
-}
-
 function refreshCanvas() {
-	getCanvasImage()
-	redrawCanvasImage()
+	/*
+	ctx.putImageData(ctxLayer1.getImageData(0, 0, canvas.width, canvas.height), 0, 0)
+	ctx.putImageData(ctxLayer2.getImageData(0, 0, canvas.width, canvas.height), 0, 0)*/
 }
 
 function addBrushPoint(x, y, mouseDown) {
@@ -203,6 +216,7 @@ function isPixelOccupied(x, y) {
 
 function draw() {
 	if(currentTool === "pencil") {
+		console.log("CONTEXT: " + ctx)
 		/*
 		if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
 			addBrushPoint(loc.x, loc.y)
@@ -243,13 +257,12 @@ function draw() {
 		}
 	}
 	
-	//refresh()
+	//refreshCanvas()
 }
 
 function isMousePressed(evt) {
 	canvas.style.cursor = "crosshair"
 	loc = getMousePos(evt.clientX, evt.clientY)
-	getCanvasImage()
 	mouseDown.x = loc.x
 	mouseDown.y = loc.y
 	drag = true
