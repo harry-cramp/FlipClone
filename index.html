@@ -28,9 +28,62 @@
 	</div>
 	<div class="flex items-center justify-center">
 		<div class="float-left">
-			<a href="#" onclick="changeTool('pencil')">
-				<img id="tool-pencil" src="./res/buttons/tools/pencil-tool-button.png">
-			</a>
+			<div style="display: grid;">
+				<div style="grid-column: 1; grid-row: 1;">
+					<a href="#" onclick="changeTool('pencil')">
+						<img id="tool-pencil" src="./res/buttons/tools/pencil-tool-button.png">
+					</a>
+				</div>
+				<div id="pencil-selector-button" class="ml-11 mt-10" style="grid-column: 1; grid-row: 1;">
+					<a href="#" onclick="showToolTypeMenu('pencil')">
+						<img id="tool-pencil-selector" src="./res/buttons/tool-types/type-selector.png">
+					</a>
+				</div>
+				<div id="pencil-selector-menu" style="display: none; grid-column: 1; grid-row: 1;">
+					<div class="grid grid-cols-3 grid-rows-3">
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/pencil-1px.png">
+							</a>
+						</div>
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/pencil-2px.png">
+							</a>
+						</div>
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/pencil-3px.png">
+							</a>
+						</div>
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/pencil-brush.png">
+							</a>
+						</div>
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/pencil-outline.png">
+							</a>
+						</div>
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/pencil-scatter.png">
+							</a>
+						</div>
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/pencil-skid.png">
+							</a>
+						</div>
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/pencil-spray.png">
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
 			<a href="#" onclick="changeTool('brush')">
 				<img id="tool-brush" src="./res/buttons/tools/brush-tool-button.png">
 			</a>
@@ -60,7 +113,7 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-center text-xs my-8">
-		Version 0.2.0
+		Version 0.2.1
 	</div>
 </body>
 </html>

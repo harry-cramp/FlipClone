@@ -101,6 +101,14 @@ function setCurrentContext() {
 	}*/
 }
 
+function showToolTypeMenu(tool) {
+	selector = document.getElementById(tool + "-selector-button")
+	menu = document.getElementById(tool + "-selector-menu")
+	
+	selector.style.display = "none"
+	menu.style.display = "grid"
+}
+
 function changeTool(tool) {
 	pencilToolButton.src = "./res/buttons/tools/pencil-tool-button.png"
 	brushToolButton.src = "./res/buttons/tools/brush-tool-button.png"
