@@ -27,6 +27,7 @@ let canvasHeight = 192
 
 // pencil tool types
 let outline = false
+let scatter = false
 
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
@@ -115,6 +116,7 @@ function showToolTypeMenu(tool) {
 function selectToolType(tool, type) {
 	if(tool === "pencil") {
 		outline = false
+		scatter = false
 		
 		switch(type) {
 			case "1px":
@@ -131,6 +133,10 @@ function selectToolType(tool, type) {
 				
 			case "outline":
 				outline = true
+				break;
+				
+			case "scatter":
+				scatter = true
 				break;
 		}
 	}
@@ -255,9 +261,12 @@ function isPixelOccupied(x, y) {
 	return !colourDataEqualsLabel(data[index], data[index + 1], data[index + 2], "white") && colourDataEqualsLabel(data[index], data[index + 1], data[index + 2], oppositeLayerColour)
 }
 
+function getRandom(min, max) {
+	return Math.floor((max - min) * Math.random() + min)
+}
+
 function draw() {
 	if(currentTool === "pencil") {
-		console.log("CONTEXT: " + ctx)
 		/*
 		if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
 			addBrushPoint(loc.x, loc.y)
@@ -272,6 +281,18 @@ function draw() {
 		}else {
 			ctx.fillRect(loc.x, loc.y, 2, 2)
 		}*/
+		if(scatter) {
+			if(getRandom(0, 4) == 1) {
+				count = Math.abs(getRandom(0, 3) - 1)
+				
+				for(let i = 0; i < count; i++) {
+					ctx.fillRect(loc.x + getRandom(-2, 2), loc.y + getRandom(-2, 2), 1, 1)
+				}
+			}
+			
+			return
+		}
+		
 		if(previousPencilPoint == null) {
 			previousPencilPoint = new Point(loc.x, loc.y)
 		}else if(previousPencilPoint.x != loc.x || previousPencilPoint != loc.y) {			
