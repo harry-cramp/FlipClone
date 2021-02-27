@@ -28,6 +28,7 @@ let canvasHeight = 192
 // pencil tool types
 let outline = false
 let scatter = false
+let skid = false
 
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
@@ -117,6 +118,7 @@ function selectToolType(tool, type) {
 	if(tool === "pencil") {
 		outline = false
 		scatter = false
+		skid = false
 		
 		switch(type) {
 			case "1px":
@@ -137,6 +139,10 @@ function selectToolType(tool, type) {
 				
 			case "scatter":
 				scatter = true
+				break;
+				
+			case "skid":
+				skid = true
 				break;
 		}
 	}
@@ -287,6 +293,18 @@ function draw() {
 				
 				for(let i = 0; i < count; i++) {
 					ctx.fillRect(loc.x + getRandom(-2, 2), loc.y + getRandom(-2, 2), 1, 1)
+				}
+			}
+			
+			return
+		}
+		
+		if(skid) {
+			if(getRandom(0, 0) == 0) {
+				count = Math.abs(getRandom(0, 5) - 1)
+				
+				for(let i = 0; i < count; i++) {
+					ctx.fillRect(loc.x + getRandom(-2, 1), loc.y + getRandom(-2, 1), 1, 1)
 				}
 			}
 			
