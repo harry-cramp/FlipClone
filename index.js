@@ -29,6 +29,7 @@ let canvasHeight = 192
 let outline = false
 let scatter = false
 let skid = false
+let spray = false
 
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
@@ -119,6 +120,7 @@ function selectToolType(tool, type) {
 		outline = false
 		scatter = false
 		skid = false
+		spray = false
 		
 		switch(type) {
 			case "1px":
@@ -143,6 +145,10 @@ function selectToolType(tool, type) {
 				
 			case "skid":
 				skid = true
+				break;
+				
+			case "spray":
+				spray = true
 				break;
 		}
 	}
@@ -305,6 +311,18 @@ function draw() {
 				
 				for(let i = 0; i < count; i++) {
 					ctx.fillRect(loc.x + getRandom(-2, 1), loc.y + getRandom(-2, 1), 1, 1)
+				}
+			}
+			
+			return
+		}
+		
+		if(spray) {
+			if(getRandom(0, 0) == 0) {
+				count = Math.abs(getRandom(0, 10) - 1)
+				
+				for(let i = 0; i < count; i++) {
+					ctx.fillRect(loc.x + getRandom(-3, 3), loc.y + getRandom(-3, 3), 1, 1)
 				}
 			}
 			
