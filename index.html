@@ -140,9 +140,62 @@
 					</div>
 				</div>
 			</div>
-			<a href="#" onclick="changeTool('eraser')">
-				<img id="tool-eraser" src="./res/buttons/tools/eraser-tool-button.png">
-			</a>
+			<div style="display: grid;">
+				<div style="grid-column: 1; grid-row: 1;">
+					<a href="#" onclick="changeTool('eraser')">
+						<img id="tool-eraser" src="./res/buttons/tools/eraser-tool-button.png">
+					</a>
+				</div>
+				<div id="eraser-selector-button" class="ml-11 mt-10" style="grid-column: 1; grid-row: 1;">
+					<a href="#" onclick="showToolTypeMenu('eraser')">
+						<img id="tool-eraser-selector" src="./res/buttons/tool-types/type-selector.png">
+					</a>
+				</div>
+				<div id="eraser-selector-menu" style="display: none; grid-column: 1; grid-row: 1;">
+					<div class="grid grid-cols-3 grid-rows-3">
+						<div>
+							<a href="#" onclick="selectToolType('eraser', '1px')">
+								<img src="./res/buttons/tool-types/eraser-1px.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('eraser', 'small')">
+								<img src="./res/buttons/tool-types/eraser-small.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('eraser', 'medium')">
+								<img src="./res/buttons/tool-types/eraser-medium.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('eraser', 'large')">
+								<img src="./res/buttons/tool-types/eraser-large.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('eraser', 'small-square')">
+								<img src="./res/buttons/tool-types/eraser-small-square.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('eraser', 'big-square')">
+								<img src="./res/buttons/tool-types/eraser-big-square.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('eraser', 'vertical')">
+								<img src="./res/buttons/tool-types/eraser-vertical.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('eraser', 'horizontal')">
+								<img src="./res/buttons/tool-types/eraser-horizontal.png">
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<canvas id="canvas" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"></canvas>
 		<canvas id="canvas_layer_2" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"
@@ -166,7 +219,7 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-center text-xs my-8">
-		Version 0.3.2
+		Version 0.3.4
 	</div>
 </body>
 </html>
