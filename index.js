@@ -32,6 +32,7 @@ let skid = false
 let spray = false
 
 let brushType = "2space"
+let eraserType = "1px"
 
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
@@ -155,6 +156,8 @@ function selectToolType(tool, type) {
 		}
 	}else if(tool === "paint")
 		brushType = type
+	else if(tool === "eraser")
+		eraserType = type
 	
 	selector = document.getElementById(tool + "-selector-button")
 	menu = document.getElementById(tool + "-selector-menu")
@@ -365,7 +368,46 @@ function draw() {
 		}
 	}else if(currentTool === "eraser") {
 		ctx.fillStyle = "white"
-		ctx.fillRect(loc.x, loc.y, 1, 1)	
+		
+		switch(eraserType) {
+			case "1px":
+				ctx.fillRect(loc.x, loc.y, 1, 1)
+				break;
+				
+			case "small":
+				ctx.fillRect(loc.x - 1, loc.y - 1, 3, 3)
+				break;
+				
+			case "medium":
+				ctx.beginPath();
+				ctx.arc(loc.x, loc.y, 2, 0, 2 * Math.PI, false);
+				ctx.fill();
+				ctx.endPath()
+				break;
+				
+			case "large":
+				ctx.beginPath();
+				ctx.arc(loc.x, loc.y, 8, 0, 2 * Math.PI, false);
+				ctx.fill();
+				ctx.endPath()
+				break;
+				
+			case "small-square":
+				ctx.fillRect(loc.x - 3, loc.y - 3, 6, 6)
+				break;
+				
+			case "big-square":
+				ctx.fillRect(loc.x - 6, loc.y - 6, 12, 12)
+				break;
+				
+			case "vertical":
+				ctx.fillRect(loc.x, loc.y, 1, 10)
+				break;
+				
+			case "horizontal":
+				ctx.fillRect(loc.x, loc.y, 10, 1)
+				break;
+		}
 	}else if(currentTool === "brush") {		
 		ctx.fillStyle = currentLayer.drawColour
 		
