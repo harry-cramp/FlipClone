@@ -31,6 +31,8 @@ let scatter = false
 let skid = false
 let spray = false
 
+let brushType = "2space"
+
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
 		this.left = left
@@ -151,13 +153,17 @@ function selectToolType(tool, type) {
 				spray = true
 				break;
 		}
-	}
+	}else if(tool === "paint")
+		brushType = type
 	
 	selector = document.getElementById(tool + "-selector-button")
 	menu = document.getElementById(tool + "-selector-menu")
 	
 	selector.style.display = "grid"
 	menu.style.display = "none"
+	
+	selectorImg = document.getElementById("tool-" + tool + "-selector")
+	selectorImg.src = "./res/buttons/tool-types/" + tool + "-" + type + ".png"
 }
 
 function changeTool(tool) {
@@ -362,23 +368,110 @@ function draw() {
 		ctx.fillRect(loc.x, loc.y, 1, 1)	
 	}else if(currentTool === "brush") {		
 		ctx.fillStyle = currentLayer.drawColour
-		console.log("x: " + loc.x + ", y: " + loc.y)
-		if(isPixelOccupied(loc.x, loc.y)) {
-			overlappingPixels.push(loc)
-		}else {
-			nearestThirdX = Math.floor(loc.x)
-			if((nearestThirdX % 3) == 1)
-				nearestThirdX--
-			else if((nearestThirdX % 3) == 2)
-				nearestThirdX++
-			
-			nearestThirdY = Math.floor(loc.y)
-			if((nearestThirdY % 3) == 1)
-				nearestThirdY--
-			else if((nearestThirdY % 3) == 2)
-				nearestThirdY++
-			
-			ctx.fillRect(nearestThirdX, nearestThirdY, 1, 1)
+		
+		switch(brushType) {
+			case "2space":
+				nearestThirdX = Math.floor(loc.x)
+				if((nearestThirdX % 3) == 1)
+					nearestThirdX--
+				else if((nearestThirdX % 3) == 2)
+					nearestThirdX++
+				
+				nearestThirdY = Math.floor(loc.y)
+				if((nearestThirdY % 3) == 1)
+					nearestThirdY--
+				else if((nearestThirdY % 3) == 2)
+					nearestThirdY++
+				
+				ctx.fillRect(nearestThirdX, nearestThirdY, 1, 1)
+				break;
+				
+			case "1space":
+				nearestSecondX = Math.floor(loc.x)
+				if((nearestSecondX % 2) == 1)
+					nearestSecondX--
+				
+				nearestSecondY = Math.floor(loc.y)
+				if((nearestSecondY % 2) == 1)
+					nearestSecondY--
+				
+				ctx.fillRect(nearestSecondX, nearestSecondY, 1, 1)
+				break;
+				
+			case "vertical":
+				nearestSecondX = Math.floor(loc.x)
+				if((nearestSecondX % 2) == 1)
+					nearestSecondX--
+				
+				ctx.fillRect(nearestSecondX, Math.floor(loc.y), 1, 4)
+				ctx.fillRect(nearestSecondX + 2, Math.floor(loc.y), 1, 4)
+				break;
+				
+			case "horizontal":
+				nearestSecondY = Math.floor(loc.y)
+				if((nearestSecondY % 2) == 1)
+					nearestSecondY--
+				
+				ctx.fillRect(Math.floor(loc.x), nearestSecondY, 4, 1)
+				ctx.fillRect(Math.floor(loc.x), nearestSecondY + 2, 4, 1)
+				break;
+				
+			case "checker":
+				trueX = Math.floor(loc.x)
+				trueY = Math.floor(loc.y)
+				
+				while((trueX % 2) != 0)
+					trueX++
+				while((trueY % 2) != 0)
+					trueY++
+				
+				ctx.fillRect(trueX - 1, trueY + 1, 1, 1)
+				ctx.fillRect(trueX - 2, trueY, 1, 1)
+				ctx.fillRect(trueX - 2, trueY + 2, 1, 1)
+				ctx.fillRect(trueX, trueY, 1, 1)
+				ctx.fillRect(trueX + 2, trueY, 1, 1)
+				ctx.fillRect(trueX + 1, trueY + 1, 1, 1)
+				ctx.fillRect(trueX, trueY + 2, 1, 1)
+				ctx.fillRect(trueX + 2, trueY + 2, 1, 1)
+				ctx.fillRect(trueX + 1, trueY + 3, 1, 1)
+				ctx.fillRect(trueX, trueY + 4, 1, 1)
+				ctx.fillRect(trueX + 2, trueY + 4, 1, 1)
+				break;
+				
+			case "invgrid2":
+				trueX = Math.floor(loc.x)
+				trueY = Math.floor(loc.y)
+				
+				while((trueX % 3) != 0)
+					trueX++
+				while((trueY % 3) != 0)
+					trueY++
+				
+				ctx.fillRect(trueX + 0, trueY, 1, 1)
+				ctx.fillRect(trueX - 2, trueY, 1, 1)
+				ctx.fillRect(trueX - 2, trueY - 1, 1, 1)
+				ctx.fillRect(trueX - 1, trueY - 1, 1, 1)
+				ctx.fillRect(trueX + 0, trueY - 1, 1, 1)
+				ctx.fillRect(trueX - 2, trueY + 1, 1, 1)
+				ctx.fillRect(trueX - 1, trueY + 1, 1, 1)
+				ctx.fillRect(trueX + 0, trueY + 1, 1, 1)
+				break;
+				
+			case "invgrid3":
+				trueX = Math.floor(loc.x)
+				trueY = Math.floor(loc.y)
+				
+				while((trueX % 2) != 0)
+					trueX++
+				while((trueY % 3) != 0)
+					trueY++
+				
+				ctx.fillRect(trueX + 0, trueY, 1, 1)
+				ctx.fillRect(trueX + 1, trueY, 1, 1)
+				ctx.fillRect(trueX + 0, trueY + 1, 1, 1)
+				ctx.fillRect(trueX + 0, trueY + 2, 1, 1)
+				ctx.fillRect(trueX + 1, trueY + 2, 2, 1)
+				break;
 		}
 	}
 	
