@@ -84,9 +84,62 @@
 					</div>
 				</div>
 			</div>
-			<a href="#" onclick="changeTool('brush')">
-				<img id="tool-brush" src="./res/buttons/tools/brush-tool-button.png">
-			</a>
+			<div style="display: grid;">
+				<div style="grid-column: 1; grid-row: 1;">					
+					<a href="#" onclick="changeTool('brush')">
+						<img id="tool-brush" src="./res/buttons/tools/brush-tool-button.png">
+					</a>
+				</div>
+				<div id="paint-selector-button" class="ml-11 mt-10" style="grid-column: 1; grid-row: 1;">
+					<a href="#" onclick="showToolTypeMenu('paint')">
+						<img id="tool-paint-selector" src="./res/buttons/tool-types/type-selector.png">
+					</a>
+				</div>
+				<div id="paint-selector-menu" style="display: none; grid-column: 1; grid-row: 1;">
+					<div class="grid grid-cols-3 grid-rows-3">
+						<div>
+							<a href="#" onclick="selectToolType('paint', '2space')">
+								<img src="./res/buttons/tool-types/paint-2space.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('paint', '1space')">
+								<img src="./res/buttons/tool-types/paint-1space.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('paint', 'horizontal')">
+								<img src="./res/buttons/tool-types/paint-horizontal.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('paint', 'vertical')">
+								<img src="./res/buttons/tool-types/paint-vertical.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('paint', 'checker')">
+								<img src="./res/buttons/tool-types/paint-checker.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('paint', 'invgrid3')">
+								<img src="./res/buttons/tool-types/paint-invgrid3.png">
+							</a>
+						</div>
+						<div>
+							<a href="#" onclick="selectToolType('paint', 'invgrid2')">
+								<img src="./res/buttons/tool-types/paint-invgrid2.png">
+							</a>
+						</div>
+						<div>
+							<a href="#">
+								<img src="./res/buttons/tool-types/paint-unknown.png">
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
 			<a href="#" onclick="changeTool('eraser')">
 				<img id="tool-eraser" src="./res/buttons/tools/eraser-tool-button.png">
 			</a>
@@ -113,7 +166,7 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-center text-xs my-8">
-		Version 0.2.4
+		Version 0.3.2
 	</div>
 </body>
 </html>
