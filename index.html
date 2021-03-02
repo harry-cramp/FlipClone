@@ -200,26 +200,33 @@
 		<canvas id="canvas" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"></canvas>
 		<canvas id="canvas_layer_2" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"
 			style="display: none;"></canvas>
-		<div>
-			<div class="float-right">
-				<a href="#" onclick="changeLayer('layer_2')">
-					<img id="layer-2" src="./res/buttons/layers/layer_2_unclicked.png">
-				</a>
+		<div style="display: grid;">
+			<div style="grid-column: 1; grid-row:1;">
+				<div class="float-right">
+					<a href="#" onclick="changeLayer('layer_2')">
+						<img id="layer-2" src="./res/buttons/layers/layer_2_unclicked.png">
+					</a>
+				</div>
+				<div class="float-right">
+					<a href="#" onclick="swapLayers()">
+						<img id="swap-layer" src="./res/buttons/layers/layer_swap.png">
+					</a>
+				</div>
+				<div class="float-right">
+					<a href="#" onclick="changeLayer('layer_1')">
+						<img id="layer-1" src="./res/buttons/layers/layer_1_unclicked.png">
+					</a>
+				</div>
 			</div>
-			<div class="float-right">
-				<a href="#" onclick="swapLayers()">
-					<img id="swap-layer" src="./res/buttons/layers/layer_swap.png">
-				</a>
-			</div>
-			<div class="float-right">
-				<a href="#" onclick="changeLayer('layer_1')">
-					<img id="layer-1" src="./res/buttons/layers/layer_1_unclicked.png">
+			<div style="grid-column: 1; grid-row: 2;">
+				<a href="#" onclick="togglePaper()">
+					<img id="slide-paper" src="./res/buttons/slides/paper.png">
 				</a>
 			</div>
 		</div>
 	</div>
 	<div class="flex items-center justify-center text-xs my-8">
-		Version 0.3.4
+		Version 0.4.0
 	</div>
 </body>
 </html>
