@@ -11,6 +11,7 @@ let brushToolButton
 let eraserToolButton
 let layer1Button
 let layer2Button
+let invertButton
 
 let brushXPoints = []
 let brushYPoints = []
@@ -19,6 +20,7 @@ let overlappingPixels = []
 
 let drag = false
 let drawColour = 'black'
+let oppDrawColour = 'white'
 let drawWidth = 2
 let currentTool = 'pencil'
 let currentLayerLabel = 'layer_1'
@@ -33,6 +35,11 @@ let spray = false
 
 let brushType = "2space"
 let eraserType = "1px"
+
+// slide settings
+let invert = false
+let slideIndex = 0
+let slides = []
 
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
@@ -78,6 +85,8 @@ function setupCanvas() {
 	canvas.addEventListener("mousemove", isMouseMoving)
 	canvas.addEventListener("mouseup", isMouseReleased)
 	ctx = ctxLayer1
+	//ctx.fillRect(0, 0, canvasWidth, canvasHeight)
+	invertCanvas()
 	
 	//canvasLayer2 = document.getElementById('canvas_layer_2')
 	//ctxLayer2 = canvasLayer2.getContext('2d')
@@ -95,8 +104,14 @@ function setupCanvas() {
 	layer1Button = document.getElementById("layer-1")
 	layer2Button = document.getElementById("layer-2")
 	
+	invertButton = document.getElementById("slide-paper")
+	
 	changeTool("pencil")
 	changeLayer(layer1.label)
+	
+	// add temporary slides
+	slides.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
+	slides.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
 }
 
 function setCurrentContext() {
@@ -169,6 +184,12 @@ function selectToolType(tool, type) {
 	selectorImg.src = "./res/buttons/tool-types/" + tool + "-" + type + ".png"
 }
 
+function loadSlide(index) {
+	slides[slideIndex] = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
+	ctx.putImageData(slides[index], 0, 0)
+	slideIndex = index
+}
+
 function changeTool(tool) {
 	pencilToolButton.src = "./res/buttons/tools/pencil-tool-button.png"
 	brushToolButton.src = "./res/buttons/tools/brush-tool-button.png"
@@ -219,6 +240,38 @@ function getMousePos(x, y) {
 	y: (y - canvasSize.top) * (canvas.height / canvasSize.height) }
 	
 	return pos
+}
+
+// invert the white or black paint on the canvas
+function invertCanvas() {
+	var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
+	for(let i = 0; i < canvasData.data.length; i += 4) {
+		canvasData.data[i] = 255 - canvasData.data[i]
+		canvasData.data[i+1] = 255 - canvasData.data[i+1]
+		canvasData.data[i+2] = 255 - canvasData.data[i+2]
+		canvasData.data[i+3] = 255
+	}
+	ctx.putImageData(canvasData, 0, 0)
+}
+
+function togglePaper() {
+	invert = !invert
+	if(invert) {
+		invertButton.src = "./res/buttons/slides/inverted-paper.png"
+		drawColour = "white"
+		oppDrawColour = "black"
+		ctx.strokeStyle = oppDrawColour
+		ctx.fillRect(0, 0, canvasWidth, canvasHeight)
+		ctx.strokeStyle = drawColour
+	}else {
+		invertButton.src = "./res/buttons/slides/paper.png"
+		drawColour = "black"
+		oppDrawColour = "white"
+		ctx.strokeStyle = drawColour
+		//ctx.fillRect(0, 0, canvasWidth, canvasHeight)
+		ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+	}
+	//invertCanvas()
 }
 
 function refreshCanvas() {
@@ -294,7 +347,7 @@ function draw() {
 		}
 		redrawCanvasImage()
 		drawBrush()*/
-		ctx.fillStyle = currentLayer.drawColour
+		ctx.fillStyle = drawColour
 		console.log("x: " + loc.x + ", y: " + loc.y)
 		/*
 		if(isPixelOccupied(loc.x, loc.y)) {
@@ -355,7 +408,7 @@ function draw() {
 				
 				ctx.beginPath()
 				ctx.lineWidth = 1
-				ctx.strokeStyle = "white"
+				ctx.strokeStyle = oppDrawColour
 				ctx.moveTo(previousPencilPoint.x, previousPencilPoint.y)
 				ctx.lineTo(loc.x, loc.y)
 				ctx.closePath()
@@ -367,7 +420,7 @@ function draw() {
 			previousPencilPoint = new Point(loc.x, loc.y)
 		}
 	}else if(currentTool === "eraser") {
-		ctx.fillStyle = "white"
+		ctx.fillStyle = oppDrawColour
 		
 		switch(eraserType) {
 			case "1px":
