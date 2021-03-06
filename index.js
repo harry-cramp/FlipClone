@@ -364,6 +364,16 @@ function erase() {
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 }
 
+function flipSlide() {
+	var canvasImg = document.createElement("img")
+	canvasImg.src = canvas.toDataURL()
+	ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+	ctx.scale(-1, 1)
+	ctx.transform(0, 0, 0, 0, 1, 0)
+	ctx.drawImage(canvasImg, 0, 0,)
+	ctx.transform(1, 0, 0, 1, 0, 0)
+}
+
 function draw() {
 	if(currentTool === "pencil") {
 		/*
