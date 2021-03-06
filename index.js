@@ -40,6 +40,8 @@ let eraserType = "1px"
 let invert = false
 let slideIndex = 0
 let slides = []
+let undoStack = []
+let redoStack = []
 
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
@@ -109,9 +111,11 @@ function setupCanvas() {
 	changeTool("pencil")
 	changeLayer(layer1.label)
 	
+	undoStack.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
+	
 	// add temporary slides
-	slides.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
-	slides.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
+	for(let i = 0; i < 5; i++)
+		slides.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
 }
 
 function setCurrentContext() {
@@ -337,6 +341,22 @@ function isPixelOccupied(x, y) {
 
 function getRandom(min, max) {
 	return Math.floor((max - min) * Math.random() + min)
+}
+
+function undo() {
+	undoData = undoStack.pop()
+	if(undoData == null)
+		return
+	ctx.putImageData(undoData, 0, 0)
+	redoStack.push(undoData)
+}
+
+function redo() {
+	redoData = redoStack.pop()
+	if(redoData == null)
+		return
+	ctx.putImageData(redoData, 0, 0)
+	undoStack.push(redoData)
 }
 
 function draw() {
@@ -602,6 +622,13 @@ function isMouseReleased(evt) {
 	//updateRubberband(loc)
 	drag = false
 	previousPencilPoint = null
+	
+	canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
+	slideSelector = document.getElementById("slide-" + (slideIndex + 1))
+	slideCtx = slideSelector.getContext('2d')
+	slideCtx.putImageData(canvasData, 0, 0)
+	
+	undoStack.push(canvasData)
 }
 
 function updateRubberbandSize(loc) {
