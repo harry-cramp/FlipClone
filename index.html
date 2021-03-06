@@ -26,6 +26,23 @@
 			<img src="./res/images/icon-32.png">
 		</a>
 	</div>
+	<div class="flex items-center justify-center my-2">
+		<a href="#" onclick="loadSlide(0)">
+			<canvas id="slide-1" class="w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
+		</a>
+		<a href="#" onclick="loadSlide(1)">
+			<canvas id="slide-2" class="float-right w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
+		</a>
+		<a href="#" onclick="loadSlide(2)">
+			<canvas id="slide-3" class="float-right w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
+		</a>
+		<a href="#" onclick="loadSlide(3)">
+			<canvas id="slide-4" class="float-right w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
+		</a>
+		<a href="#" onclick="loadSlide(4)">
+			<canvas id="slide-5" class="float-right w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
+		</a>
+	</div>
 	<div class="flex items-center justify-center">
 		<div class="float-left">
 			<div style="display: grid;">
@@ -196,6 +213,14 @@
 					</div>
 				</div>
 			</div>
+			<div class="flex">
+				<a href="#" onclick="undo()">
+					<img id="undo-img" src="./res/buttons/slides/undo.png">
+				</a>
+				<a href="#" onclick="redo()" class="float-right">
+					<img id="redo-img" src="./res/buttons/slides/redo.png">
+				</a>
+			</div>
 		</div>
 		<canvas id="canvas" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"></canvas>
 		<canvas id="canvas_layer_2" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"
@@ -225,8 +250,25 @@
 			</div>
 		</div>
 	</div>
-	<div class="flex items-center justify-center text-xs my-8">
-		Version 0.4.2
+	<div class="flex items-center justify-center my-2">
+		<a href="#" class="mx-1">
+			<img id="full-reverse-img" src="./res/buttons/controls/full-reverse.png">
+		</a>
+		<a href="#">
+			<img id="reverse-img" src="./res/buttons/controls/reverse.png">
+		</a>
+		<a href="#" class="mx-1">
+			<img id="play-img" src="./res/buttons/controls/play.png">
+		</a>
+		<a href="#">
+			<img id="forward-img" src="./res/buttons/controls/forward.png">
+		</a>
+		<a href="#" class="mx-1">
+			<img id="full-forward-img" src="./res/buttons/controls/full-forward.png">
+		</a>
+	</div>
+	<div class="flex items-center justify-center text-xs my-4">
+		Version 0.5.3
 	</div>
 </body>
 </html>
