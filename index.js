@@ -359,6 +359,11 @@ function redo() {
 	undoStack.push(redoData)
 }
 
+function erase() {
+	undoStack.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
+	ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+}
+
 function draw() {
 	if(currentTool === "pencil") {
 		/*
