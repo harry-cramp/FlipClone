@@ -213,12 +213,17 @@
 					</div>
 				</div>
 			</div>
-			<div class="flex">
-				<a href="#" onclick="undo()">
-					<img id="undo-img" src="./res/buttons/slides/undo.png">
-				</a>
-				<a href="#" onclick="redo()" class="float-right">
-					<img id="redo-img" src="./res/buttons/slides/redo.png">
+			<div style="display: grid;">
+				<div class="flex" style="grid-column: 1; grid-row: 1;">
+					<a href="#" onclick="undo()">
+						<img id="undo-img" src="./res/buttons/slides/undo.png">
+					</a>
+					<a href="#" onclick="redo()" class="float-right">
+						<img id="redo-img" src="./res/buttons/slides/redo.png">
+					</a>
+				</div>
+				<a href="#" onclick="erase()" style="grid-column: 1; grid-row: 2;">
+					<img id="erase-img" src="./res/buttons/slides/erase.png">
 				</a>
 			</div>
 		</div>
@@ -268,7 +273,7 @@
 		</a>
 	</div>
 	<div class="flex items-center justify-center text-xs my-4">
-		Version 0.5.3
+		Version 0.5.5
 	</div>
 </body>
 </html>
