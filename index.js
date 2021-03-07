@@ -370,8 +370,13 @@ function flipSlide() {
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 	ctx.scale(-1, 1)
 	ctx.transform(0, 0, 0, 0, 1, 0)
-	ctx.drawImage(canvasImg, 0, 0,)
+	ctx.drawImage(canvasImg, 0, 0)
 	ctx.transform(1, 0, 0, 1, 0, 0)
+}
+
+function removeSlide() {
+	slides.splice(slideIndex, 1)
+	ctx.putImageData(slides[slideIndex], 0, 0)
 }
 
 function draw() {
