@@ -379,6 +379,14 @@ function removeSlide() {
 	ctx.putImageData(slides[slideIndex], 0, 0)
 }
 
+function insertSlide() {
+	firstHalf = slides.slice(0, slideIndex)
+	secondHalf = slides.slice(slideIndex, slides.length)
+	firstHalf = firstHalf.concat(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
+	slides = firstHalf.concat(secondHalf)
+	ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+}
+
 function draw() {
 	if(currentTool === "pencil") {
 		/*
