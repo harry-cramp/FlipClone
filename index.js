@@ -39,6 +39,7 @@ let eraserType = "1px"
 // slide settings
 let invert = false
 let slideIndex = 0
+let slideClipboard
 let slides = []
 let undoStack = []
 let redoStack = []
@@ -379,12 +380,23 @@ function removeSlide() {
 	ctx.putImageData(slides[slideIndex], 0, 0)
 }
 
-function insertSlide() {
+function insertSlide(paste) {
 	firstHalf = slides.slice(0, slideIndex)
 	secondHalf = slides.slice(slideIndex, slides.length)
 	firstHalf = firstHalf.concat(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
 	slides = firstHalf.concat(secondHalf)
-	ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+	if(!paste)
+		ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+	else
+		ctx.putImageData(clipboardData, 0, 0)
+}
+
+function copySlide() {
+	clipboardData = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
+}
+
+function pasteSlide() {
+	insertSlide(true)
 }
 
 function draw() {
