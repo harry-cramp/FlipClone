@@ -47,6 +47,7 @@ let redoStack = []
 // player settings
 let playSpeed = 1
 let play = false
+let stop = true
 
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
@@ -214,14 +215,22 @@ function nextSlide() {
 }
 
 function playSlides() {
-	play = true
-	slideIndex = 0
-	playNextSlide()
+	if(!play) {
+		play = true
+		stop = false
+		slideIndex = 0
+		document.getElementById("play-img").src = "./res/buttons/controls/stop.png"
+		playNextSlide()
+	}else {
+		stop = true
+		document.getElementById("play-img").src = "./res/buttons/controls/play.png"
+	}
 }
 
 function playNextSlide() {
-	if(slideIndex >= slides.length - 1) {
+	if(slideIndex >= slides.length - 1 || stop) {
 		play = false
+		document.getElementById("play-img").src = "./res/buttons/controls/play.png"
 		return
 	}
 	setTimeout(function() {
