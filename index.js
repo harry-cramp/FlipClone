@@ -44,6 +44,10 @@ let slides = []
 let undoStack = []
 let redoStack = []
 
+// player settings
+let playSpeed = 1
+let play = false
+
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
 		this.left = left
@@ -209,8 +213,21 @@ function nextSlide() {
 	loadSlide(slideIndex + 1)
 }
 
-function play() {
-	
+function playSlides() {
+	play = true
+	slideIndex = 0
+	playNextSlide()
+}
+
+function playNextSlide() {
+	if(slideIndex >= slides.length - 1) {
+		play = false
+		return
+	}
+	setTimeout(function() {
+		nextSlide()
+		playNextSlide()
+	}, playSpeed * 1000)
 }
 
 function changeTool(tool) {
