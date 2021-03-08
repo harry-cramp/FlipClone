@@ -190,9 +190,27 @@ function selectToolType(tool, type) {
 }
 
 function loadSlide(index) {
+	if(index < 0 || index >= slides.length)
+		return
 	slides[slideIndex] = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
 	ctx.putImageData(slides[index], 0, 0)
 	slideIndex = index
+}
+
+function loadLastSlide() {
+	loadSlide(slides.length - 1)
+}
+
+function previousSlide() {
+	loadSlide(slideIndex - 1)
+}
+
+function nextSlide() {
+	loadSlide(slideIndex + 1)
+}
+
+function play() {
+	
 }
 
 function changeTool(tool) {
