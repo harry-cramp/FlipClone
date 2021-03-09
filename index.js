@@ -49,6 +49,8 @@ let playSpeed = 1
 let play = false
 let stop = true
 
+const MAX_SPEED = 8
+
 class ShapeBoundingBox {
 	constructor(left, upper, width, height) {
 		this.left = left
@@ -227,6 +229,10 @@ function playSlides() {
 	}
 }
 
+function getSpeedFraction() {
+	return Math.pow(0.5, playSpeed - 1)
+}
+
 function playNextSlide() {
 	if(slideIndex >= slides.length - 1 || stop) {
 		play = false
@@ -236,7 +242,14 @@ function playNextSlide() {
 	setTimeout(function() {
 		nextSlide()
 		playNextSlide()
-	}, playSpeed * 1000)
+	}, getSpeedFraction() * 2000)
+}
+
+function increaseSpeed() {
+	playSpeed++
+	if(playSpeed > MAX_SPEED)
+		playSpeed = 1
+	document.getElementById("speed-img").src = "./res/buttons/speed/" + playSpeed + ".png"
 }
 
 function changeTool(tool) {
