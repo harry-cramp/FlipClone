@@ -48,6 +48,7 @@ let redoStack = []
 let playSpeed = 1
 let play = false
 let stop = true
+let repeat = true
 
 const MAX_SPEED = 8
 
@@ -235,10 +236,15 @@ function getSpeedFraction() {
 
 function playNextSlide() {
 	if(slideIndex >= slides.length - 1 || stop) {
-		play = false
-		document.getElementById("play-img").src = "./res/buttons/controls/play.png"
-		return
+		if(repeat) {
+			loadSlide(0)
+		}else {
+			play = false
+			document.getElementById("play-img").src = "./res/buttons/controls/play.png"
+			return
+		}
 	}
+	
 	setTimeout(function() {
 		nextSlide()
 		playNextSlide()
@@ -250,6 +256,15 @@ function increaseSpeed() {
 	if(playSpeed > MAX_SPEED)
 		playSpeed = 1
 	document.getElementById("speed-img").src = "./res/buttons/speed/" + playSpeed + ".png"
+}
+
+function toggleRepeat() {
+	repeat = !repeat
+	repeatButton = document.getElementById("repeat-img")
+	if(repeat)
+		repeatButton.src = "./res/buttons/controls/repeat.png"
+	else
+		repeatButton.src = "./res/buttons/controls/runthrough.png"
 }
 
 function changeTool(tool) {
