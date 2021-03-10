@@ -262,12 +262,18 @@
 					</a>
 				</div>
 			</div>
-			<div style="grid-column: 1; grid-row: 2;">
+			<div style="grid-column: 1; grid-row: 2;" class="flex">
 				<a href="#" onclick="togglePaper()">
 					<img id="slide-paper" src="./res/buttons/slides/paper.png">
 				</a>
+				<a href="#" onclick="toggleTrace()" class="float-right">
+					<img id="slide-trace" src="./res/buttons/slides/trace.png">
+				</a>
+				<a href="#" onclick="togglePaper()" class="float-right">
+					<img id="slide-copy" src="./res/buttons/slides/copy.png">
+				</a>
 			</div>
-			<div style="grid-column: 1; grid-row: 3;">
+			<div style="grid-column: 1; grid-row: 3;" class="flex">
 				<a href="#" onclick="flipSlide()">
 					<img id="slide-flip" src="./res/buttons/slides/flip.png">
 				</a>
@@ -300,7 +306,7 @@
 		</a>
 	</div>
 	<div class="flex items-center justify-center text-xs my-4">
-		Version 0.8.0
+		Version 0.8.2
 	</div>
 </body>
 </html>
