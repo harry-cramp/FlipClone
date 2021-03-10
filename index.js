@@ -38,6 +38,8 @@ let eraserType = "1px"
 
 // slide settings
 let invert = false
+let trace = false
+let copy = false
 let slideIndex = 0
 let slideClipboard
 let slides = []
@@ -349,6 +351,18 @@ function togglePaper() {
 		ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 	}
 	//invertCanvas()
+}
+
+function toggleTrace() {
+	trace = !trace
+	traceButton = document.getElementById("slide-trace")
+	traceButton.src = "./res/buttons/slides/trace" + ((trace) ? "-on" : "") + ".png"
+}
+
+function toggleCopy() {
+	copy = !copy
+	copyButton = document.getElementById("slide-copy")
+	copyButton.src = "./res/buttons/slides/copy" + ((copy) ? "-on" : "") + ".png"
 }
 
 function refreshCanvas() {
