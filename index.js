@@ -1,7 +1,9 @@
 let canvas
+let canvasSelectLayer
 let canvasLayer1
 let canvasLayer2
 let ctx
+let ctxSelectLayer
 let ctxLayer1
 let ctxLayer2
 let canvasImage
@@ -19,6 +21,8 @@ let brushDownPos = []
 let overlappingPixels = []
 
 let drag = false
+let selecting = false
+let makeSelection = false
 let drawColour = 'black'
 let oppDrawColour = 'white'
 let drawWidth = 2
@@ -100,6 +104,13 @@ function setupCanvas() {
 	ctx = ctxLayer1
 	//ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 	invertCanvas()
+	
+	canvasSelectLayer = document.getElementById("canvas_select_layer")
+	canvasSelectLayer.addEventListener("mousedown", isMousePressedSelect)
+	canvasSelectLayer.addEventListener("mousemove", isMouseMoving)
+	canvasSelectLayer.addEventListener("mouseup", isMouseReleased)
+	ctxSelectLayer = canvasSelectLayer.getContext("2d")
+	ctxSelectLayer.strokeStyle = "green"
 	
 	//canvasLayer2 = document.getElementById('canvas_layer_2')
 	//ctxLayer2 = canvasLayer2.getContext('2d')
@@ -291,6 +302,22 @@ function changeLayer(flipLayer) {
 	}
 	
 	setCurrentContext()
+}
+
+function makeSelect() {
+	selectButton = document.getElementById("make-select")
+	
+	if(makeSelection) {
+		selectButton.src = "./res/buttons/slides/selection/select.png"
+		makeSelection = false
+		selecting = false
+		canvasSelectLayer.style = "display: grid; grid-column: 1; grid-row: 1;"
+		canvasSelectLayer.clearRect(0, 0, canvasSelectLayer.width, canvasSelectLayer.height)
+	}else {
+		selectButton.src = "./res/buttons/slides/selection/select-on.png"
+		makeSelection = true
+		canvasSelectLayer.style = "display: grid; grid-column: 1; grid-row: 1;"
+	}
 }
 
 function swapLayers() {
@@ -719,6 +746,32 @@ function draw() {
 	//refreshCanvas()
 }
 
+function drawSelect() {
+	if(previousPencilPoint == null) {
+		previousPencilPoint = new Point(loc.x, loc.y)
+	}else if(previousPencilPoint.x != loc.x || previousPencilPoint != loc.y) {			
+		ctxSelectLayer.beginPath()
+		ctxSelectLayer.lineWidth = 1
+		ctxSelectLayer.moveTo(previousPencilPoint.x, previousPencilPoint.y)
+		ctxSelectLayer.lineTo(loc.x, loc.y)
+		ctxSelectLayer.closePath()
+		ctxSelectLayer.stroke()
+		
+		previousPencilPoint = new Point(loc.x, loc.y)
+	}
+}
+
+function isMousePressedSelect(evt) {
+	ctxSelectLayer.clearRect(0, 0, canvasSelectLayer.width, canvasSelectLayer.height)
+	canvasSelectLayer.style.cursor = "crosshair"
+	loc = getMousePos(evt.clientX, evt.clientY)
+	mouseDown.x = loc.x
+	mouseDown.y = loc.y
+	selecting = true
+	
+	drawSelect()
+}
+
 function isMousePressed(evt) {
 	canvas.style.cursor = "crosshair"
 	loc = getMousePos(evt.clientX, evt.clientY)
@@ -735,6 +788,8 @@ function isMouseMoving(evt) {
 	
 	if(drag) {
 		draw()
+	}else if(selecting) {
+		drawSelect()
 	}
 	
 	// handle brush
@@ -749,12 +804,16 @@ function isMouseReleased(evt) {
 	drag = false
 	previousPencilPoint = null
 	
-	canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
-	slideSelector = document.getElementById("slide-" + (slideIndex + 1))
-	slideCtx = slideSelector.getContext('2d')
-	slideCtx.putImageData(canvasData, 0, 0)
-	
-	undoStack.push(canvasData)
+	if(!selecting) {
+		canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
+		slideSelector = document.getElementById("slide-" + (slideIndex + 1))
+		slideCtx = slideSelector.getContext('2d')
+		slideCtx.putImageData(canvasData, 0, 0)
+		
+		undoStack.push(canvasData)
+	}else {
+		selecting = false
+	}
 }
 
 function updateRubberbandSize(loc) {

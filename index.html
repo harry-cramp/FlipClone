@@ -241,9 +241,11 @@
 				</a>
 			</div>
 		</div>
-		<canvas id="canvas" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"></canvas>
-		<canvas id="canvas_layer_2" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"
-			style="display: none;"></canvas>
+		<div style="display: grid;">
+			<canvas id="canvas" class="w-100 h-100 bg-white" style="grid-column: 1; grid-row: 1;" width="256" height="192" resize stats hidpi="off"></canvas>
+			<canvas id="canvas_select_layer" class="w-100 h-100 bg-transparent" width="256" height="192" resize stats hidpi="off"
+				style="display: none; grid-column: 1; grid-row: 1;"></canvas>
+		</div>
 		<div style="display: grid;">
 			<div style="grid-column: 1; grid-row:1;">
 				<div class="float-right">
@@ -274,20 +276,20 @@
 				</a>
 			</div>
 			<div style="grid-column: 1; grid-row: 3;" class="flex">
-				<a href="#" onclick="flipSlide()">
-					<img id="slide-select" src="./res/buttons/slides/selection/select.png">
+				<a href="#" onclick="makeSelect()">
+					<img id="make-select" src="./res/buttons/slides/selection/select.png">
 				</a>
 				<a href="#" onclick="flipSlide()" class="mx-1">
-					<img id="slide-copy" src="./res/buttons/slides/selection/copy-select-invalid.png">
+					<img id="select-copy" src="./res/buttons/slides/selection/copy-select-invalid.png">
 				</a>
 				<a href="#" onclick="flipSlide()">
-					<img id="slide-paste" src="./res/buttons/slides/selection/paste-select-invalid.png">
+					<img id="select-paste" src="./res/buttons/slides/selection/paste-select-invalid.png">
 				</a>
 				<a href="#" onclick="flipSlide()" class="mx-1">
-					<img id="slide-shrink" src="./res/buttons/slides/selection/shrink.png">
+					<img id="select-shrink" src="./res/buttons/slides/selection/shrink.png">
 				</a>
 				<a href="#" onclick="flipSlide()">
-					<img id="slide-flip" src="./res/buttons/slides/selection/flip.png">
+					<img id="select-flip" src="./res/buttons/slides/selection/flip.png">
 				</a>
 			</div>
 		</div>
@@ -318,7 +320,7 @@
 		</a>
 	</div>
 	<div class="flex items-center justify-center text-xs my-4">
-		Version 0.8.6
+		Version 0.8.7
 	</div>
 </body>
 </html>
