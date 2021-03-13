@@ -242,7 +242,10 @@
 			</div>
 		</div>
 		<div style="display: grid;">
-			<canvas id="canvas" class="w-100 h-100 bg-white" style="grid-column: 1; grid-row: 1;" width="256" height="192" resize stats hidpi="off"></canvas>
+			<canvas id="canvas" class="w-100 h-100 bg-white" width="256" height="192" resize stats hidpi="off"
+				style="grid-column: 1; grid-row: 1;"></canvas>
+			<canvas id="canvas_top_layer" class="w-100 h-100 bg-transparent" width="256" height="192" resize stats hidpi="off"
+				style="display: none; grid-column: 1; grid-row: 1;"></canvas>
 			<canvas id="canvas_select_layer" class="w-100 h-100 bg-transparent" width="256" height="192" resize stats hidpi="off"
 				style="display: none; grid-column: 1; grid-row: 1;"></canvas>
 		</div>
@@ -271,7 +274,7 @@
 				<a href="#" onclick="toggleTrace()" class="float-right">
 					<img id="slide-trace" src="./res/buttons/slides/trace.png">
 				</a>
-				<a href="#" onclick="togglePaper()" class="float-right">
+				<a href="#" onclick="toggleCopy()" class="float-right">
 					<img id="slide-copy" src="./res/buttons/slides/copy.png">
 				</a>
 			</div>
@@ -320,7 +323,7 @@
 		</a>
 	</div>
 	<div class="flex items-center justify-center text-xs my-4">
-		Version 0.8.7
+		Version 0.8.8
 	</div>
 </body>
 </html>

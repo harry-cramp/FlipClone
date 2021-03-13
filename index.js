@@ -1,4 +1,5 @@
 let canvas
+let canvasTopLayer
 let canvasSelectLayer
 let canvasLayer1
 let canvasLayer2
@@ -95,14 +96,22 @@ document.addEventListener('DOMContentLoaded', setupCanvas)
 
 function setupCanvas() {
 	canvas = document.getElementById('canvas')
-	ctxLayer1 = canvas.getContext('2d')
-	ctxLayer1.strokeStyle = drawColour
-	ctxLayer1.lineWidth = drawWidth
+	ctxLayer2 = canvas.getContext('2d')
+	ctxLayer2.strokeStyle = "red"
+	ctxLayer2.lineWidth = drawWidth
 	canvas.addEventListener("mousedown", isMousePressed)
 	canvas.addEventListener("mousemove", isMouseMoving)
 	canvas.addEventListener("mouseup", isMouseReleased)
+	
+	canvasTopLayer = document.getElementById('canvas_top_layer')
+	ctxLayer1 = canvas.getContext('2d')
+	ctxLayer1.strokeStyle = drawColour
+	ctxLayer1.lineWidth = drawWidth
+	canvasTopLayer.addEventListener("mousedown", isMousePressed)
+	canvasTopLayer.addEventListener("mousemove", isMouseMoving)
+	canvasTopLayer.addEventListener("mouseup", isMouseReleased)
 	ctx = ctxLayer1
-	//ctx.fillRect(0, 0, canvasWidth, canvasHeight)
+	
 	invertCanvas()
 	
 	canvasSelectLayer = document.getElementById("canvas_select_layer")
@@ -136,7 +145,7 @@ function setupCanvas() {
 	undoStack.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
 	
 	// add temporary slides
-	for(let i = 0; i < 5; i++)
+	for(let i = 0; i < 2; i++)
 		slides.push(ctx.getImageData(0, 0, canvasWidth, canvasHeight))
 }
 
@@ -227,7 +236,19 @@ function previousSlide() {
 }
 
 function nextSlide() {
-	loadSlide(slideIndex + 1)
+	if(slideIndex == slides.length - 1) {
+		if(copy) {
+			copyData = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
+			slides.push(ctx.createImageData(canvasWidth, canvasHeight))
+			loadLastSlide()
+			ctx.putImageData(copyData, 0, 0)
+		}else {
+			slides.push(ctx.createImageData(canvasWidth, canvasHeight))
+			loadLastSlide()
+		}
+	}else {
+		loadSlide(slideIndex + 1)
+	}
 }
 
 function playSlides() {
@@ -294,14 +315,16 @@ function changeLayer(flipLayer) {
 	currentLayerLabel = flipLayer
 	
 	if(flipLayer === "layer_2") {
-		currentLayer = layer2
-		layer2Button.src = "./res/buttons/layers/layer_2_" + currentLayer.drawColour + "_clicked.png"
+		ctx = ctxLayer2
+		layer2Button.src = "./res/buttons/layers/layer_2_" + ctx.drawColour + "_clicked.png"
+		canvas.style = "display: grid; grid-column: 1; grid-row: 1;"
+		canvasTopLayer.style = "display: none; grid-column: 1; grid-row: 1;"
 	}else {
-		currentLayer = layer1
-		layer1Button.src = "./res/buttons/layers/layer_1_" + currentLayer.drawColour + "_clicked.png"
+		ctx = ctxLayer1
+		layer1Button.src = "./res/buttons/layers/layer_1_" + ctx.drawColour + "_clicked.png"
+		canvas.style = "display: none; grid-column: 1; grid-row: 1;"
+		canvasTopLayer.style = "display: grid; grid-column: 1; grid-row: 1;"
 	}
-	
-	setCurrentContext()
 }
 
 function makeSelect() {
