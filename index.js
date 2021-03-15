@@ -104,7 +104,7 @@ function setupCanvas() {
 	canvas.addEventListener("mouseup", isMouseReleased)
 	
 	canvasTopLayer = document.getElementById('canvas_top_layer')
-	ctxLayer1 = canvas.getContext('2d')
+	ctxLayer1 = canvasTopLayer.getContext('2d')
 	ctxLayer1.strokeStyle = drawColour
 	ctxLayer1.lineWidth = drawWidth
 	canvasTopLayer.addEventListener("mousedown", isMousePressed)
@@ -120,14 +120,6 @@ function setupCanvas() {
 	canvasSelectLayer.addEventListener("mouseup", isMouseReleased)
 	ctxSelectLayer = canvasSelectLayer.getContext("2d")
 	ctxSelectLayer.strokeStyle = "green"
-	
-	//canvasLayer2 = document.getElementById('canvas_layer_2')
-	//ctxLayer2 = canvasLayer2.getContext('2d')
-	//ctxLayer2.strokeStyle = layer2.drawColour
-	//ctxLayer2.lineWidth = drawWidth
-	//canvasLayer2.addEventListener("mousedown", isMousePressed)
-	//canvasLayer2.addEventListener("mousemove", isMouseMoving)
-	//canvasLayer2.addEventListener("mouseup", isMouseReleased)
 	
 	// get GUI elements
 	pencilToolButton = document.getElementById("tool-pencil")
@@ -316,12 +308,12 @@ function changeLayer(flipLayer) {
 	
 	if(flipLayer === "layer_2") {
 		ctx = ctxLayer2
-		layer2Button.src = "./res/buttons/layers/layer_2_" + ctx.drawColour + "_clicked.png"
+		layer2Button.src = "./res/buttons/layers/layer_2_" + layer2.drawColour + "_clicked.png"
 		canvas.style = "display: grid; grid-column: 1; grid-row: 1;"
 		canvasTopLayer.style = "display: none; grid-column: 1; grid-row: 1;"
 	}else {
 		ctx = ctxLayer1
-		layer1Button.src = "./res/buttons/layers/layer_1_" + ctx.drawColour + "_clicked.png"
+		layer1Button.src = "./res/buttons/layers/layer_1_" + layer1.drawColour + "_clicked.png"
 		canvas.style = "display: none; grid-column: 1; grid-row: 1;"
 		canvasTopLayer.style = "display: grid; grid-column: 1; grid-row: 1;"
 	}
@@ -344,29 +336,24 @@ function makeSelect() {
 }
 
 function swapLayers() {
-	//tempColour = layer1.drawColour
-	//layer1.drawColour = layer2.drawColour
-	//layer2.drawColour = tempColour
-	/*
-	if(currentLayerLabel === layer1.label) {
-		//canvasLayer1.style.display = "none"
-		//canvasLayer2.style.display = "inline"
-		ctx = ctxLayer2
-		changeLayer(layer2.label)
-	}else {
-		//canvasLayer1.style.display = "inline"
-		//canvasLayer2.style.display = "none"
-		ctx = ctxLayer1
-		changeLayer(layer1.label)
-	}*/
+	tempColour = ctxLayer1.strokeStyle
+	ctxLayer1.strokeStyle = ctxLayer2.strokeStyle
+	ctxLayer2.strokeStyle = tempColour
+	
+	tempData = ctxLayer1.getImageData(0, 0, canvasWidth, canvasHeight)
+	ctxLayer1.putImageData(ctxLayer2.getImageData(0, 0, canvasWidth, canvasHeight), 0, 0)
+	ctxLayer2.putImageData(tempData, 0, 0)
+	
 }
 
 // get mouse position relative to canvas
 function getMousePos(x, y) {
-	let canvasSize = canvas.getBoundingClientRect()
+	currentCanvas = (currentLayerLabel === "layer_2") ? canvas : canvasTopLayer
 	
-	pos = { x: (x - canvasSize.left) * (canvas.width / canvasSize.width),
-	y: (y - canvasSize.top) * (canvas.height / canvasSize.height) }
+	let canvasSize = currentCanvas.getBoundingClientRect()
+	
+	pos = { x: (x - canvasSize.left) * (currentCanvas.width / canvasSize.width),
+	y: (y - canvasSize.top) * (currentCanvas.height / canvasSize.height) }
 	
 	return pos
 }
@@ -543,7 +530,7 @@ function draw() {
 		}
 		redrawCanvasImage()
 		drawBrush()*/
-		ctx.fillStyle = drawColour
+		//ctx.fillStyle = drawColour
 		console.log("x: " + loc.x + ", y: " + loc.y)
 		/*
 		if(isPixelOccupied(loc.x, loc.y)) {
@@ -797,6 +784,7 @@ function isMousePressedSelect(evt) {
 
 function isMousePressed(evt) {
 	canvas.style.cursor = "crosshair"
+	canvasTopLayer.style.cursor = "crosshair"
 	loc = getMousePos(evt.clientX, evt.clientY)
 	mouseDown.x = loc.x
 	mouseDown.y = loc.y
@@ -807,6 +795,7 @@ function isMousePressed(evt) {
 
 function isMouseMoving(evt) {
 	canvas.style.cursor = "crosshair"
+	canvasTopLayer.style.cursor = "crosshair"
 	loc = getMousePos(evt.clientX, evt.clientY)
 	
 	if(drag) {
@@ -820,6 +809,7 @@ function isMouseMoving(evt) {
 
 function isMouseReleased(evt) {
 	canvas.style.cursor = "default"
+	canvasTopLayer.style.cursor = "default"
 	loc = getMousePos(evt.clientX, evt.clientY)
 		
 	//redrawCanvasImage()
