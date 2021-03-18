@@ -24,6 +24,7 @@ let overlappingPixels = []
 let drag = false
 let selecting = false
 let makeSelection = false
+let editorVisible = false
 let drawColour = 'black'
 let oppDrawColour = 'white'
 let drawWidth = 2
@@ -520,6 +521,18 @@ function copySlide() {
 
 function pasteSlide() {
 	insertSlide(true)
+}
+
+function openEditor() {
+	slideEditor = document.getElementById("slide-editor")
+	
+	if(editorVisible) {
+		slideEditor.style.display = "none"
+		editorVisible = false
+	}else {
+		slideEditor.style.display = "grid"
+		editorVisible = true
+	}
 }
 
 function draw() {

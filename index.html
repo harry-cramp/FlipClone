@@ -26,37 +26,6 @@
 			<img src="./res/images/icon-32.png">
 		</a>
 	</div>
-	<div class="flex items-center justify-center my-2">
-		<a href="#" onclick="loadSlide(0)">
-			<canvas id="slide-1" class="w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
-		</a>
-		<a href="#" onclick="loadSlide(1)">
-			<canvas id="slide-2" class="float-right w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
-		</a>
-		<a href="#" onclick="loadSlide(2)">
-			<canvas id="slide-3" class="float-right w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
-		</a>
-		<a href="#" onclick="loadSlide(3)">
-			<canvas id="slide-4" class="float-right w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
-		</a>
-		<a href="#" onclick="loadSlide(4)">
-			<canvas id="slide-5" class="float-right w-100 h-100 mx-2 bg-white" width="50" height="38" resize stats hidpi="off"></canvas>
-		</a>
-	</div>
-	<div class="flex items-center justify-center">
-		<a href="#" onclick="removeSlide()">
-			<img src="./res/buttons/slides/editor/erase.png">
-		</a>
-		<a href="#" onclick="insertSlide(false)" class="float-right">
-			<img src="./res/buttons/slides/editor/insert.png">
-		</a>
-		<a href="#" onclick="copySlide()" class="float-right">
-			<img src="./res/buttons/slides/editor/copy.png">
-		</a>
-		<a href="#" onclick="pasteSlide()" class="float-right">
-			<img src="./res/buttons/slides/editor/paste.png">
-		</a>
-	</div>
 	<div class="flex items-center justify-center">
 		<div class="float-left">
 			<div style="display: grid;">
@@ -296,7 +265,7 @@
 				</a>
 			</div>
 			<div style="grid-column: 1; grid-row: 4;" class="flex">
-				<a href="#">
+				<a href="#" onclick="openEditor()">
 					<img id="fx-editor" src="./res/buttons/after-effects/editor.png">
 				</a>
 				<a href="#" class="mx-1">
@@ -306,6 +275,39 @@
 					<img id="fx-mic" src="./res/buttons/after-effects/mic.png">
 				</a>
 			</div>
+		</div>
+	</div>
+	<div id="slide-editor" style="display: none;">
+		<div class="flex items-center justify-center my-2 bg-black">
+			<a href="#" onclick="loadSlide(0)">
+				<canvas id="slide-1" class="w-100 h-100 mx-2 bg-white" width="100" height="76" resize stats hidpi="off"></canvas>
+			</a>
+			<a href="#" onclick="loadSlide(1)">
+				<canvas id="slide-2" class="float-right w-100 h-100 mx-2 bg-white" width="100" height="76" resize stats hidpi="off"></canvas>
+			</a>
+			<a href="#" onclick="loadSlide(2)">
+				<canvas id="slide-3" class="float-right w-100 h-100 mx-2 bg-white" width="100" height="76" resize stats hidpi="off"></canvas>
+			</a>
+			<a href="#" onclick="loadSlide(3)">
+				<canvas id="slide-4" class="float-right w-100 h-100 mx-2 bg-white" width="100" height="76" resize stats hidpi="off"></canvas>
+			</a>
+			<a href="#" onclick="loadSlide(4)">
+				<canvas id="slide-5" class="float-right w-100 h-100 mx-2 bg-white" width="100" height="76" resize stats hidpi="off"></canvas>
+			</a>
+		</div>
+		<div class="flex items-center justify-center">
+			<a href="#" onclick="removeSlide()">
+				<img src="./res/buttons/slides/editor/erase.png">
+			</a>
+			<a href="#" onclick="insertSlide(false)" class="float-right">
+				<img src="./res/buttons/slides/editor/insert.png">
+			</a>
+			<a href="#" onclick="copySlide()" class="float-right">
+				<img src="./res/buttons/slides/editor/copy.png">
+			</a>
+			<a href="#" onclick="pasteSlide()" class="float-right">
+				<img src="./res/buttons/slides/editor/paste.png">
+			</a>
 		</div>
 	</div>
 	<div class="flex items-center justify-center my-2">
@@ -334,7 +336,7 @@
 		</a>
 	</div>
 	<div class="flex items-center justify-center text-xs my-4">
-		Version 0.9.3
+		Version 0.9.4
 	</div>
 </body>
 </html>
