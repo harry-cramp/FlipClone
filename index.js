@@ -642,11 +642,11 @@ function draw() {
 				break;
 				
 			case "vertical":
-				ctx.fillRect(loc.x, loc.y, 1, 10)
+				ctx.fillRect(loc.x - 5, loc.y, 10, 1)
 				break;
 				
 			case "horizontal":
-				ctx.fillRect(loc.x, loc.y, 10, 1)
+				ctx.fillRect(loc.x, loc.y - 5, 1, 10)
 				break;
 		}
 	}else if(currentTool === "brush") {		
