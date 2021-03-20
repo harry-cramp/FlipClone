@@ -623,14 +623,14 @@ function draw() {
 				ctx.beginPath();
 				ctx.arc(loc.x, loc.y, 2, 0, 2 * Math.PI, false);
 				ctx.fill();
-				ctx.endPath()
+				ctx.closePath()
 				break;
 				
 			case "large":
 				ctx.beginPath();
 				ctx.arc(loc.x, loc.y, 8, 0, 2 * Math.PI, false);
 				ctx.fill();
-				ctx.endPath()
+				ctx.closePath()
 				break;
 				
 			case "small-square":
