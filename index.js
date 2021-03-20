@@ -535,6 +535,16 @@ function openEditor() {
 	}
 }
 
+function specialDraw(drawChance, countChance, landLower, landUpper) {
+	if(getRandom(0, drawChance) == 0) {
+		count = Math.abs(getRandom(0, countChance) - 1)
+		
+		for(let i = 0; i < count; i++) {
+			ctx.fillRect(loc.x + getRandom(landLower, landUpper), loc.y + getRandom(landLower, landUpper), 1, 1)
+		}
+	}
+}
+
 function draw() {
 	if(currentTool === "pencil") {
 		/*
@@ -552,37 +562,19 @@ function draw() {
 			ctx.fillRect(loc.x, loc.y, 2, 2)
 		}*/
 		if(scatter) {
-			if(getRandom(0, 4) == 1) {
-				count = Math.abs(getRandom(0, 3) - 1)
-				
-				for(let i = 0; i < count; i++) {
-					ctx.fillRect(loc.x + getRandom(-2, 2), loc.y + getRandom(-2, 2), 1, 1)
-				}
-			}
+			specialDraw(4, 3, -2, 2)
 			
 			return
 		}
 		
 		if(skid) {
-			if(getRandom(0, 0) == 0) {
-				count = Math.abs(getRandom(0, 5) - 1)
-				
-				for(let i = 0; i < count; i++) {
-					ctx.fillRect(loc.x + getRandom(-2, 1), loc.y + getRandom(-2, 1), 1, 1)
-				}
-			}
+			specialDraw(0, 5, -2, 1)
 			
 			return
 		}
 		
 		if(spray) {
-			if(getRandom(0, 0) == 0) {
-				count = Math.abs(getRandom(0, 10) - 1)
-				
-				for(let i = 0; i < count; i++) {
-					ctx.fillRect(loc.x + getRandom(-3, 3), loc.y + getRandom(-3, 3), 1, 1)
-				}
-			}
+			specialDraw(0, 10, -3, 3)
 			
 			return
 		}
