@@ -327,8 +327,8 @@ function makeSelect() {
 		selectButton.src = "./res/buttons/slides/selection/select.png"
 		makeSelection = false
 		selecting = false
-		canvasSelectLayer.style = "display: grid; grid-column: 1; grid-row: 1;"
-		canvasSelectLayer.clearRect(0, 0, canvasSelectLayer.width, canvasSelectLayer.height)
+		canvasSelectLayer.style = "display: none; grid-column: 1; grid-row: 1;"
+		ctxSelectLayer.clearRect(0, 0, canvasSelectLayer.width, canvasSelectLayer.height)
 	}else {
 		selectButton.src = "./res/buttons/slides/selection/select-on.png"
 		makeSelection = true
