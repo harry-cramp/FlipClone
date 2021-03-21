@@ -546,6 +546,8 @@ function specialDraw(drawChance, countChance, landLower, landUpper) {
 }
 
 function draw() {
+	ctx.fillStyle = (currentLayerLabel === "layer_1") ? layer1.drawColour : layer2.drawColour
+		
 	if(currentTool === "pencil") {
 		/*
 		if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
@@ -554,7 +556,6 @@ function draw() {
 		redrawCanvasImage()
 		drawBrush()*/
 		//ctx.fillStyle = drawColour
-		console.log("x: " + loc.x + ", y: " + loc.y)
 		/*
 		if(isPixelOccupied(loc.x, loc.y)) {
 			overlappingPixels.push(loc)
@@ -649,9 +650,7 @@ function draw() {
 				ctx.fillRect(loc.x, loc.y - 5, 1, 10)
 				break;
 		}
-	}else if(currentTool === "brush") {		
-		ctx.fillStyle = currentLayer.drawColour
-		
+	}else if(currentTool === "brush") {
 		switch(brushType) {
 			case "2space":
 				nearestThirdX = Math.floor(loc.x)
